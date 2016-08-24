@@ -33,7 +33,6 @@ feature "restaurants" do
   end
 
   context 'viewing restaurants' do
-
     let!(:kfc){ Restaurant.create(name:'KFC') }
 
     scenario 'lets a user view a restaurant' do
@@ -45,7 +44,6 @@ feature "restaurants" do
   end
 
   context 'editing restaurants' do
-
     before { Restaurant.create name: 'KFC', description: 'Deep fried goodness' }
 
     scenario 'let a user edit a restaurant' do
@@ -61,7 +59,6 @@ feature "restaurants" do
   end
 
   context 'deleting restaurants' do
-
     before { Restaurant.create name: 'KFC', description: 'Deep fried goodness' }
 
     scenario 'removes a restaurant when a user clicks a delete link' do
@@ -69,6 +66,23 @@ feature "restaurants" do
       click_link 'Delete KFC'
       expect(page).not_to have_content 'KFC'
       expect(page).to have_content 'Restaurant deleted successfully'
+    end
+  end
+
+  require 'rails_helper'
+
+feature 'reviewing' do
+  before { Restaurant.create name: 'KFC', description: 'Deep fried goodness' }
+
+    scenario 'allows users to leave a review using a form' do
+       visit '/restaurants'
+       click_link 'Review KFC'
+       fill_in "Thoughts", with: "so so"
+       select '3', from: 'Rating'
+       click_button 'Leave Review'
+
+       expect(current_path).to eq '/restaurants'
+       expect(page).to have_content('so so')
     end
   end
 end
